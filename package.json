@@ -10,11 +10,16 @@
     "type": "git",
     "url": "git+https://github.com/latagore/github-avatar-downloader.git"
   },
-  "keywords": ["learning"],
+  "keywords": [
+    "learning"
+  ],
   "author": "Steven Xu",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/latagore/github-avatar-downloader/issues"
   },
-  "homepage": "https://github.com/latagore/github-avatar-downloader#readme"
+  "homepage": "https://github.com/latagore/github-avatar-downloader#readme",
+  "dependencies": {
+    "request": "^2.81.0"
+  }
 }
