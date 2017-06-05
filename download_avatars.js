@@ -1,3 +1,4 @@
+require('dotenv').config(); // import .env file
 var request = require('request');
 var fs = require('fs');
 var mkdirp = require('mkdirp');
