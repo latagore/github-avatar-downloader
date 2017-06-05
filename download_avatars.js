@@ -12,21 +12,29 @@ if (!GITHUB_TOKEN) {
   process.exit(1);
 }
 
+if (process.argv.length !== 4) {
+  console.error(`usage: node download_avatars.js <owner> <repo>`);
+  process.exit(1);
+}
+const OWNER = process.argv[2];
+const REPO = process.argv[3];
 
+const OPTIONS = {
+  headers: {
+    'User-Agent': 'GitHub Avatar Downloader - Student Project'
+  }
+};
+
+
+// gets all the contributor data from the github API for a given project
 function getRepoContributors(repoOwner, repoName, cb) {
   var requestURL = 'https://'+ GITHUB_USER + ':' + GITHUB_TOKEN + '@api.github.com/repos/' + repoOwner + '/' + repoName + '/contributors';
-  console.log(requestURL);
+  console.info(`getting contributors from "${requestURL}"`);
 
-  var options = {
-    url: requestURL,
-    headers: {
-      'User-Agent': 'GitHub Avatar Downloader - Student Project'
-    }
-  };
-  
-  request.get(options, (error, response, body) => {
+  request.get(requestURL, OPTIONS, (error, response, body) => {
     if (error) {
       console.error("failed to make HTTP request");
+      process.exit(1);
     } 
     
     const results = JSON.parse(body);
@@ -34,19 +42,19 @@ function getRepoContributors(repoOwner, repoName, cb) {
   });
 }
 
-getRepoContributors('jquery', 'jquery', (results) => {
-  results.forEach((user) => {
+// test the function
+getRepoContributors(OWNER, REPO, (results) => {
+  results.forEach((user, i) => {
     let url = user.avatar_url;
-    let outputFilePath = url.split("/");
-    outputFilePath = outputFilePath[outputFilePath.length - 1];
-    downloadImageByURL(url, "avatars/" + outputFilePath);
+    downloadImageByURL(url, "avatars/" + user.login + ".jpg");
   });
 });
 
+// downloads an image at `url` and saves it to the given `filePath`
 function downloadImageByURL(url, filePath) {
   // TODO account for ENOENT error
-  request.get(url)
-  .pipe(fs.createWriteStream(filePath));
-}
+  console.info(`downloading avatar from "${url}"`);
 
-downloadImageByURL("https://avatars2.githubusercontent.com/u/2741?v=3&s=466", "avatars/kvirani.jpg");
+  request.get(url, OPTIONS)
+    .pipe(fs.createWriteStream(filePath));
+}
