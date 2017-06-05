@@ -34,7 +34,17 @@ function getRepoContributors(repoOwner, repoName, cb) {
   });
 }
 
+getRepoContributors('jquery', 'jquery', (results) => {
+  results.forEach((user) => {
+    let url = user.avatar_url;
+    let outputFilePath = url.split("/");
+    outputFilePath = outputFilePath[outputFilePath.length - 1];
+    downloadImageByURL(url, "avatars/" + outputFilePath);
+  });
+});
+
 function downloadImageByURL(url, filePath) {
+  // TODO account for ENOENT error
   request.get(url)
   .pipe(fs.createWriteStream(filePath));
 }
