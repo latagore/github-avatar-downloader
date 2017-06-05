@@ -24,7 +24,20 @@ const OPTIONS = {
     'User-Agent': 'GitHub Avatar Downloader - Student Project'
   }
 };
+// ============================================
+// test the function
+// ============================================
+getRepoContributors(OWNER, REPO, (results) => {
+  results.forEach((user, i) => {
+    let url = user.avatar_url;
+    downloadImageByURL(url, "avatars/" + user.login + ".jpg");
+  });
+});
 
+
+// ============================================
+// helpers
+// ============================================
 
 // gets all the contributor data from the github API for a given project
 function getRepoContributors(repoOwner, repoName, cb) {
@@ -41,14 +54,6 @@ function getRepoContributors(repoOwner, repoName, cb) {
     cb(results);
   });
 }
-
-// test the function
-getRepoContributors(OWNER, REPO, (results) => {
-  results.forEach((user, i) => {
-    let url = user.avatar_url;
-    downloadImageByURL(url, "avatars/" + user.login + ".jpg");
-  });
-});
 
 // downloads an image at `url` and saves it to the given `filePath`
 function downloadImageByURL(url, filePath) {
