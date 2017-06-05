@@ -6,12 +6,12 @@ var mkdirp = require('mkdirp');
 
 const GITHUB_USER = process.env.GITHUB_USER;
 if (!GITHUB_USER) {
-  console.error("Need to provide GITHUB_USER environment variable");
+  console.error("Need to provide GITHUB_USER environment variable. Ensure you have a .env file in the project.");
   process.exit(1);
 }
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 if (!GITHUB_TOKEN) {
-  console.error("Need to provide GITHUB_TOKEN environment variable");
+  console.error("Need to provide GITHUB_TOKEN environment variable. Ensure you have a .env file in the project.");
   process.exit(1);
 }
 
@@ -31,6 +31,11 @@ const OPTIONS = {
 // ============================================
 // test the function
 // ============================================
+validLogin(GITHUB_USER, GITHUB_TOKEN)
+  .catch((err) => {
+    console.error("Invalid user or token. Check your .env file or environment settings.");
+    process.exit(1);
+  });
 getRepoContributors(OWNER, REPO, (results) => {
   results.forEach((user, i) => {
     let url = user.avatar_url;
@@ -42,6 +47,20 @@ getRepoContributors(OWNER, REPO, (results) => {
 // ============================================
 // helpers
 // ============================================
+// ensures that the function is valid
+function validLogin(user, token) {
+  var url = 'https://'+ GITHUB_USER + ':' + GITHUB_TOKEN + '@api.github.com/';
+  
+  return new Promise((resolve, reject) => {
+    request.get(url, OPTIONS, (error, response) => {
+      if (error || response.statusCode !== 200 ){
+        reject();
+      } else {
+        resolve();
+      }
+    });
+  });
+}
 
 // gets all the contributor data from the github API for a given project
 function getRepoContributors(repoOwner, repoName, cb) {
