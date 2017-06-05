@@ -1,4 +1,9 @@
-require('dotenv').config(); // import .env file
+var config = require('dotenv').config(); // import .env file
+if (config.error) {
+  console.log("Something was wrong with your .env config:");
+  console.log(config.error);
+  process.exit(1);
+}
 var request = require('request');
 var fs = require('fs');
 var mkdirp = require('mkdirp');
@@ -37,6 +42,7 @@ validLogin(GITHUB_USER, GITHUB_TOKEN)
     process.exit(1);
   });
 getRepoContributors(OWNER, REPO, (results) => {
+  console.log(`downloading ${results.length} avatars`);
   results.forEach((user, i) => {
     let url = user.avatar_url;
     downloadImageByURL(url, "avatars/" + user.login + ".jpg");
@@ -81,7 +87,6 @@ function getRepoContributors(repoOwner, repoName, cb) {
 // downloads an image at `url` and saves it to the given `filePath`
 function downloadImageByURL(url, filePath) {
   // TODO account for ENOENT error
-  console.info(`downloading avatar from "${url}"`);
   mkdirp('avatars', function (err) {
     if (err) {
       console.error(err);
