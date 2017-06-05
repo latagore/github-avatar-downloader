@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/latagore/github-avatar-downloader#readme",
   "dependencies": {
+    "mkdirp": "^0.5.1",
     "request": "^2.81.0"
   }
 }

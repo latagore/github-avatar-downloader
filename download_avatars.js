@@ -1,5 +1,7 @@
 var request = require('request');
 var fs = require('fs');
+var mkdirp = require('mkdirp');
+
 
 const GITHUB_USER = process.env.GITHUB_USER;
 if (!GITHUB_USER) {
@@ -24,6 +26,7 @@ const OPTIONS = {
     'User-Agent': 'GitHub Avatar Downloader - Student Project'
   }
 };
+
 // ============================================
 // test the function
 // ============================================
@@ -59,7 +62,14 @@ function getRepoContributors(repoOwner, repoName, cb) {
 function downloadImageByURL(url, filePath) {
   // TODO account for ENOENT error
   console.info(`downloading avatar from "${url}"`);
-
-  request.get(url, OPTIONS)
-    .pipe(fs.createWriteStream(filePath));
+  mkdirp('avatars', function (err) {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+    
+    request.get(url, OPTIONS)
+      .pipe(fs.createWriteStream(filePath));
+  });
+  
 }
