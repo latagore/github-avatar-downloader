@@ -1,0 +1,20 @@
+{
+  "name": "github-avatar-downloader",
+  "version": "1.0.0",
+  "description": "Given a GitHub repository name and owner, download all the contributors' profile images and save them to a subdirectory, `avatars/`.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/latagore/github-avatar-downloader.git"
+  },
+  "keywords": ["learning"],
+  "author": "Steven Xu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/latagore/github-avatar-downloader/issues"
+  },
+  "homepage": "https://github.com/latagore/github-avatar-downloader#readme"
+}
