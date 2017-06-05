@@ -1,4 +1,5 @@
 var request = require('request');
+var fs = require('fs');
 
 const GITHUB_USER = process.env.GITHUB_USER;
 if (!GITHUB_USER) {
@@ -33,8 +34,9 @@ function getRepoContributors(repoOwner, repoName, cb) {
   });
 }
 
-getRepoContributors("jquery", "jquery", (results) => {
-    results.forEach(user => {
-      console.log(user.avatar_url);
-    })
-});
+function downloadImageByURL(url, filePath) {
+  request.get(url)
+  .pipe(fs.createWriteStream(filePath));
+}
+
+downloadImageByURL("https://avatars2.githubusercontent.com/u/2741?v=3&s=466", "avatars/kvirani.jpg");
