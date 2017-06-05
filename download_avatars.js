@@ -75,9 +75,15 @@ function getRepoContributors(repoOwner, repoName, cb) {
 
   request.get(requestURL, OPTIONS, (error, response, body) => {
     if (error) {
-      console.error("failed to make HTTP request");
+      console.error("failed to make HTTP request:");
+      console.log(error);
       process.exit(1);
-    } 
+    } else if (response.statusCode !== 200) {
+      console.error("failed to make HTTP request:");
+      const result = JSON.parse(body);
+      console.log(result.message || result);
+      process.exit(1);
+    }
     
     const results = JSON.parse(body);
     cb(results);
